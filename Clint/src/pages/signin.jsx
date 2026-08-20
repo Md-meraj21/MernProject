@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
 
 function Signin() {
     const primaryColor = "#ff4d2d";
@@ -17,10 +19,24 @@ function Signin() {
 
     const handleSignin = async () => {
         try {
-            const result = await axios.post(`${serverUrl}/api/auth/signin`,{
+            const result = await axios.post(`${serverUrl}/api/auth/signin`, {
                 email, password
-            },{withCredentials:true})
+            }, { withCredentials: true })
             console.log(result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleGoogleAuth = async () => {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        console.log(result);
+        try {
+            const {data} = await axios.post(`${serverUrl}/api/auth/google-auth`,{
+                email:result.user.email,
+            },{withCredentials:true});
+            console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -42,7 +58,7 @@ function Signin() {
                     Food Fly
                 </h1>
                 <p className="text-gray-600 mb-8">Sign In your account to get delicious Delites to your own destiny !</p>
-                
+
                 {/* Email */}
                 <div className="mb-4">
                     <label htmlFor="Email"
@@ -52,10 +68,10 @@ function Signin() {
                     </label>
                     <input type="email" className="w-full rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                         placeholder="Enter your Email"
-                        style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e)=>setEmail(e.target.value)} value={email}/>
+                        style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e) => setEmail(e.target.value)} value={email} />
                 </div>
 
-                
+
                 {/* Password */}
 
                 <div className="mb-4">
@@ -67,7 +83,7 @@ function Signin() {
                     <div className="relative">
                         <input type={`${showpassword ? "text" : "password"}`} className="w-full rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                             placeholder="Enter your Password"
-                            style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e)=>setPassword(e.target.value)} value={password}/>
+                            style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e) => setPassword(e.target.value)} value={password} />
                         <button className="absolute right-3 top-[14px] cursor-pointer text-gray-500 "
                             onClick={() => setShowpassword(prev => !prev)}
                         >
@@ -76,24 +92,26 @@ function Signin() {
                     </div>
                 </div>
                 {/* Forgot password */}
-                <div className="text-right mb-1 text-[#ff4d2d] cursor-pointer" onClick={()=>navigate("/ForgotPassword")}>
+                <div className="text-right mb-1 text-[#ff4d2d] cursor-pointer" onClick={() => navigate("/ForgotPassword")}>
                     forgot password
                 </div>
-                
+
                 {/* button */}
                 <button type="button" className="w-full font-semibold rounded-lg 
-                        py-2 transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer" 
-                        onClick={handleSignin}
+                        py-2 transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer"
+                    onClick={handleSignin}
                 >
                     sign up
                 </button>
                 {/* Google SignIn */}
                 <button className="w-full mt-4 flex item-center justify-center
-                 gap-2 border rounded-lg px-4 py-2 transition duration-200 border-gray-200 hover:bg-gray-100 cursor-pointer">
+                 gap-2 border rounded-lg px-4 py-2 transition duration-200 border-gray-200 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleGoogleAuth}
+                >
                     <FcGoogle size={20} />
-                    <span>Sign in with Google !</span>
+                    <span >Sign in with Google !</span>
                 </button>
-                <p className="text-center mt-2">No Account ? <span className="text-[#ff4d2d] cursor-pointer " onClick={()=> {
+                <p className="text-center mt-2">No Account ? <span className="text-[#ff4d2d] cursor-pointer " onClick={() => {
                     navigate("/signup")
                 }}>Sign In</span></p>
             </div>

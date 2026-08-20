@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
+
 
 function Signup() {
     const primaryColor = "#ff4d2d";
@@ -19,10 +22,31 @@ function Signup() {
 
     const handleSignUp = async () => {
         try {
-            const result = await axios.post(`${serverUrl}/api/auth/signup`,{
-                fullname ,email, password,mobile,role
-            },{withCredentials:true})
+            const result = await axios.post(`${serverUrl}/api/auth/signup`, {
+                fullname, email, password, mobile, role
+            }, { withCredentials: true })
             console.log(result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleGoogleAuth = async () => {
+        
+            if (!mobile) {
+                return alert("Enter your Number ")
+            }
+            const provider = new GoogleAuthProvider;
+            const result = await signInWithPopup(auth, provider);
+            console.log(result);
+            try {
+            const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
+                fullName: result.user.displayName,
+                email: result.user.email,
+                mobile,
+                role,
+            }, { withCredentials: true });
+            console.log(data);
         } catch (error) {
             console.log(error);
         }
@@ -54,7 +78,7 @@ function Signup() {
                     </label>
                     <input type="text" className="w-full rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                         placeholder="Enter your fullName"
-                        style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e)=>setFullName(e.target.value)} value={fullname} />
+                        style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e) => setFullName(e.target.value)} value={fullname} />
                 </div>
                 {/* Email */}
                 <div className="mb-4">
@@ -65,7 +89,7 @@ function Signup() {
                     </label>
                     <input type="email" className="w-full rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                         placeholder="Enter your Email"
-                        style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e)=>setEmail(e.target.value)} value={email}/>
+                        style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e) => setEmail(e.target.value)} value={email} />
                 </div>
 
                 {/* Mobile */}
@@ -78,7 +102,7 @@ function Signup() {
                     </label>
                     <input type="tel" className="w-full rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                         placeholder="Enter your Mobile Number"
-                        style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e)=>setMobile(e.target.value)} value={mobile} />
+                        style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e) => setMobile(e.target.value)} value={mobile} />
                 </div>
                 {/* Password */}
 
@@ -91,7 +115,7 @@ function Signup() {
                     <div className="relative">
                         <input type={`${showpassword ? "text" : "password"}`} className="w-full rounded-lg px-3 py-2 focus:outline-none focus:border-orange-500 "
                             placeholder="Enter your Password"
-                            style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e)=>setPassword(e.target.value)} value={password}/>
+                            style={{ borderColor: borderColor, border: "1px solid" }} onChange={(e) => setPassword(e.target.value)} value={password} />
                         <button className="absolute right-3 top-[14px] cursor-pointer text-gray-500 "
                             onClick={() => setShowpassword(prev => !prev)}
                         >
@@ -111,7 +135,7 @@ function Signup() {
                     <div className="flex gap-2">
                         {["user", "owner", "Delivery"].map((r) => {
                             return (
-                                <button className="flex-1 border rounded-lg px-3 py-2 text-center 
+                                <button key={r} className="flex-1 border rounded-lg px-3 py-2 text-center 
                             font-medium transition-colors cursor-pointer"
                                     onClick={() => { setRole(r) }}
                                     style={
@@ -126,17 +150,19 @@ function Signup() {
                     </div>
                 </div>
                 <button type="button" className="w-full font-semibold rounded-lg 
-                        py-2 transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer" 
-                        onClick={handleSignUp}
+                        py-2 transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer"
+                    onClick={handleSignUp}
                 >
                     sign up
                 </button>
                 <button className="w-full mt-4 flex item-center justify-center
-                 gap-2 border rounded-lg px-4 py-2 transition duration-200 border-gray-200 hover:bg-gray-100 cursor-pointer">
+                 gap-2 border rounded-lg px-4 py-2 transition duration-200 border-gray-200 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleGoogleAuth}
+                >
                     <FcGoogle size={20} />
                     <span>Sign up with Google !</span>
                 </button>
-                <p className="text-center mt-2">Already have account ? <span className="text-[#ff4d2d] cursor-pointer " onClick={()=> {
+                <p className="text-center mt-2">Already have account ? <span className="text-[#ff4d2d] cursor-pointer " onClick={() => {
                     navigate("/signin")
                 }}>Sign In</span></p>
             </div>
