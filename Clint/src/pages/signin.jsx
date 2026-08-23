@@ -33,12 +33,14 @@ function Signin() {
         const result = await signInWithPopup(auth, provider);
         console.log(result);
         try {
-            const {data} = await axios.post(`${serverUrl}/api/auth/google-auth`,{
-                email:result.user.email,
-            },{withCredentials:true});
+            const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
+                email: result.user.email,
+            }, { withCredentials: true });
             console.log(data);
         } catch (error) {
-            console.log(error);
+            console.log("Status:", error.response?.status);
+            console.log("Error data:", error.response?.data);
+            console.log("Full error:", error);
         }
     }
 

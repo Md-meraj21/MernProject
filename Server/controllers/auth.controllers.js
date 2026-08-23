@@ -129,12 +129,13 @@ export const ResetPassword = async (req,res) => {
 export const googleAuth = async (req,res) => {
     try {
     const {fullname,mobile,email,role} = req.body;
-    const user = await User.findOne({email});
+    let user = await User.findOne({email});
     if (!user) {
         user = await User.create({
-            fullname,mobile,email,role
+            fullname,mobile,email,role :role,
         })
     }
+    const token = await genToken(user._id);
     res.cookie("token", token, {
             secure: false,  //baad me jab host karna hai to true karunga
             sameSite: "strict",
