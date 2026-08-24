@@ -35,6 +35,7 @@ function Signin() {
         try {
             const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
                 email: result.user.email,
+                fullname:result.user.displayName,
             }, { withCredentials: true });
             console.log(data);
         } catch (error) {
@@ -60,7 +61,6 @@ function Signin() {
                     Food Fly
                 </h1>
                 <p className="text-gray-600 mb-8">Sign In your account to get delicious Delites to your own destiny !</p>
-
                 {/* Email */}
                 <div className="mb-4">
                     <label htmlFor="Email"

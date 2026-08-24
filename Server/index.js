@@ -16,7 +16,7 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(cookieParser())
-app.use("/api/auth", authRouter)
+app.use("/api/auth",authRouter)
 await connectDb();
 
 app.listen(port, () => {

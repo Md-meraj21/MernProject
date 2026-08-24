@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     fullname:{
         type: String,
-        required:true,
     },
     email:{
         type:String,
@@ -15,12 +14,12 @@ const userSchema = new mongoose.Schema({
     },
     mobile:{
         type:String,
-        required:true,
+        default:null,
     },
     role:{
         type:String,
         enum:["user","owner","Delivery"],
-        required:true,
+        default:"user",
     },
     resetOtp:{
         type:String

@@ -109,42 +109,50 @@ export const VerifyOtp = async (req, res) => {
     }
 }
 
-export const ResetPassword = async (req,res) => {
+export const ResetPassword = async (req, res) => {
     try {
-        const {email, newPassword} =req.body;
-        const user = await User.findOne({email});
+        const { email, newPassword } = req.body;
+        const user = await User.findOne({ email });
         if (!user || !user.isOtpVerified) {
-            return res.status(400).json({message: "otp Verification Required"});
+            return res.status(400).json({ message: "otp Verification Required" });
         }
-        const hashedpassword = await bcrypt.hash(newPassword,10);
-        user.password= hashedpassword;
+        const hashedpassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedpassword;
         user.isOtpVerified = false;
         await user.save();
-        return res.status(200).json({message:"Password Reset Successfully "})
+        return res.status(200).json({ message: "Password Reset Successfully " })
     } catch (error) {
-        return res.status(500).json({message:`Reset password Error ${error}`});
+        return res.status(500).json({ message: `Reset password Error ${error}` });
     }
 }
 
-export const googleAuth = async (req,res) => {
+export const googleAuth = async (req, res) => {
     try {
-    const {fullname,mobile,email,role} = req.body;
-    let user = await User.findOne({email});
-    if (!user) {
-        user = await User.create({
-            fullname,mobile,email,role :role,
-        })
-    }
-    const token = await genToken(user._id);
-    res.cookie("token", token, {
+        
+
+        const { fullname, email } = req.body;
+        // const { fullname, mobile, email, role } = req.body;
+        let user = await User.findOne({ email });
+        if (!user) {
+            user = await User.create({
+                fullname,
+                email,
+            })
+        }
+        const token = await genToken(user._id);
+        res.cookie("token", token, {
             secure: false,  //baad me jab host karna hai to true karunga
             sameSite: "strict",
             maxAge: 14 * 24 * 60 * 60 * 1000,
             httpOnly: true,
         })
-         return res.status(200).json(user)
+        return res.status(200).json(user)
     } catch (error) {
-         return res.status(500).json({message:"Google Auth Error "})
+        console.error("GOOGLE AUTH ERROR:");
+        console.error(error);
+        console.error("Message:", error.message);
+        console.error("Stack:", error.stack);
+        return res.status(500).json({ message: "Google Auth Error " })
     }
 
 }
