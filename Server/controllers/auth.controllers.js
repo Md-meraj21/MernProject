@@ -130,13 +130,15 @@ export const googleAuth = async (req, res) => {
     try {
         
 
-        const { fullname, email } = req.body;
-        // const { fullname, mobile, email, role } = req.body;
+        // const { fullname, email } = req.body;
+        const { fullname, mobile, email, role } = req.body;
         let user = await User.findOne({ email });
         if (!user) {
             user = await User.create({
                 fullname,
                 email,
+                mobile,
+                role,
             })
         }
         const token = await genToken(user._id);

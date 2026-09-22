@@ -36,7 +36,7 @@ function Signup() {
             if (!mobile) {
                 return alert("Enter your Number ")
             }
-            const provider = new GoogleAuthProvider;
+            const provider = new GoogleAuthProvider();
             const result = await signInWithPopup(auth, provider);
             console.log(result);
             try {
