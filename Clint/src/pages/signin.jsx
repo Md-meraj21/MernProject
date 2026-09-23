@@ -12,7 +12,6 @@ function Signin() {
     const bgColor = "#fff9f6";
     const borderColor = "#ddd";
     const [showpassword, setShowpassword] = useState(false);
-    const [role, setRole] = useState("user")
     const navigate = useNavigate();
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
