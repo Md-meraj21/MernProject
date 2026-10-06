@@ -4,7 +4,7 @@ import axios from "axios";
 import { AppContext } from "../Context/appContext";
 
 function useGetCurrentUser() {
-    const { setUser } = useContext(AppContext) || {};
+    const { setUser } = useContext(AppContext);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -12,6 +12,7 @@ function useGetCurrentUser() {
                 const result = await axios.get(`${serverUrl}/api/user/current`, {
                     withCredentials: true,
                 });
+                console.log(result);
                 if (setUser) {
                     setUser(result.data);
                 }
