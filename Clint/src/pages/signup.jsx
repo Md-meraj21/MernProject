@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useDebugValue, useState } from "react";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,9 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
-import {} from "react-spinners";
+import { ClipLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 
 function Signup() {
@@ -23,12 +25,15 @@ function Signup() {
     const [error, setError] = useState("");
     const [loading,setLoading] = useState(false);
 
+    const dispatch = useDispatch();
+
     const handleSignUp = async () => {
         setLoading(true);
         try {
             const result = await axios.post(`${serverUrl}/api/auth/signup`, {
                 fullname, email, password, mobile, role
             }, { withCredentials: true })
+            dispatch(setUserData(result.data));
             console.log(result)
             setLoading(false);
         } catch (error) {
@@ -55,6 +60,7 @@ function Signup() {
                 mobile,
                 role,
             }, { withCredentials: true });
+            dispatch(setUserData(data));
             console.log(data);
         } catch (error) {
             console.log(error);

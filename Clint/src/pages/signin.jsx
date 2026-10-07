@@ -6,6 +6,8 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 function Signin() {
     const primaryColor = "#ff4d2d";
@@ -16,12 +18,14 @@ function Signin() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    const dispatch = useDispatch();
+
     const handleSignin = async () => {
         try {
             const result = await axios.post(`${serverUrl}/api/auth/signin`, {
                 email, password
             }, { withCredentials: true })
-            console.log(result)
+            dispatch(setUserData(result.data));
         } catch (error) {
             console.log(error);
         }
@@ -30,13 +34,13 @@ function Signin() {
     const handleGoogleAuth = async () => {
         const provider = new GoogleAuthProvider();
         const result = await signInWithPopup(auth, provider);
-        console.log(result);
+
         try {
             const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
                 email: result.user.email,
-                fullname:result.user.displayName,
+                fullname: result.user.displayName,
             }, { withCredentials: true });
-            console.log(data);
+            dispatch(setUserData(data));
         } catch (error) {
             console.log("Status:", error.response?.status);
             console.log("Error data:", error.response?.data);
@@ -114,7 +118,7 @@ function Signin() {
                 </button>
                 <p className="text-center mt-2">No Account ? <span className="text-[#ff4d2d] cursor-pointer " onClick={() => {
                     navigate("/signup")
-                }}>Sign In</span></p>
+                }}>Sign Up</span></p>
             </div>
         </div>
     );
