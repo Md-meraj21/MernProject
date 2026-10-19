@@ -10,15 +10,15 @@ export const serverUrl = "http://localhost:8000";
 
 const App = () => {
   useGetCurrentUser();
-  const {userData} = useSelector(state=> state.user)
+  const { userData } = useSelector(state => state.user)
   return (
     <Routes>
-      <Route path="/signup" element={!userData?<Signup />:<Navigate to={"/"}/>} />
-      <Route path="/signin" element={!userData?<Signin />:<Navigate to={"/"}/>} />
-      <Route path="/ForgotPassword" element={!userData?<ForgotPassword />:<Navigate to={"/"}/>} />
-      <Route path="/" element={userData?<home />:<Navigate to={"/signin"}/>} />
+      <Route path="/signup" element={!userData ? <Signup /> : <Navigate to={"/"} />} />
+      <Route path="/signin" element={!userData ? <Signin /> : <Navigate to={"/"} />} />
+      <Route path="/ForgotPassword" element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />} />
+      <Route path="/" element={userData ? <home /> : <Navigate to={"/signin"} />} />
     </Routes>
-  );
-};
+  )
+}
 
 export default App;
