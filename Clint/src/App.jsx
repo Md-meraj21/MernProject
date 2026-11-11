@@ -5,6 +5,7 @@ import Signin from "./pages/signin";
 import ForgotPassword from "./pages/ForgotPassword";
 import useGetCurrentUser from "./hooks/useGetCurrentUser";
 import { useSelector } from "react-redux";
+import Home from "./pages/home";
 
 export const serverUrl = "http://localhost:8000";
 
@@ -16,7 +17,7 @@ const App = () => {
       <Route path="/signup" element={!userData ? <Signup /> : <Navigate to={"/"} />} />
       <Route path="/signin" element={!userData ? <Signin /> : <Navigate to={"/"} />} />
       <Route path="/ForgotPassword" element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />} />
-      <Route path="/" element={userData ? <home /> : <Navigate to={"/signin"} />} />
+      <Route path="/" element={userData ? <Home /> : <Navigate to={"/signin"} />} />
     </Routes>
   )
 }
