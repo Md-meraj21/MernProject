@@ -1,6 +1,6 @@
 function DeliveryDadhboard() {
     return(
-        <p></p>
+        <p> Delivery Boy Dashboard</p>
     )
 }
 

@@ -1,6 +1,6 @@
 function OwnerDashboard() {
     return(
-        <p></p>
+        <p>OwnerDashboad</p>
     )
 }
 

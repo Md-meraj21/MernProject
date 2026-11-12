@@ -18,7 +18,7 @@ function useGetCurrentUser() {
             catch (error) {
                 // If not logged in (401 or 400), don't throw an error; keep user null
                 if (error.response?.status === 401 || error.response?.status === 400) {
-                    if (setUser) setUser(null);
+                    dispatch(setUserData(null));
                     return;
                 }
                 console.error("Error fetching current user:", error);

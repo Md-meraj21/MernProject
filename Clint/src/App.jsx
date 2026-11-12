@@ -5,7 +5,7 @@ import Signin from "./pages/signin";
 import ForgotPassword from "./pages/ForgotPassword";
 import useGetCurrentUser from "./hooks/useGetCurrentUser";
 import { useSelector } from "react-redux";
-import Home from "./pages/home";
+import Home from "./pages/Home";
 
 export const serverUrl = "http://localhost:8000";
 
