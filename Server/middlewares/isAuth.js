@@ -6,14 +6,14 @@ const isAuth = async (req,res,next) => {
     try {
         const token = req.cookies.token;
         if(!token) {
-            res.status(400).json({message:"token is not found"});
+           return res.status(400).json({message:"token is not found"});
         }
         const decodeToken = jwt.verify(token,process.env.SECRET);
         if (!decodeToken) {
-            res.status(400).json({message:"Token not verify"})
+           return res.status(400).json({message:"Token not verify"})
         }
         // console.log(decodeToken);
-        req.userId = decodeToken.userId;
+        req.userId = decodeToken.userid;
         next();
     } catch (error) {
          res.status(500).json({message:"isAuth Error"});

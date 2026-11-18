@@ -128,10 +128,9 @@ export const ResetPassword = async (req, res) => {
 
 export const googleAuth = async (req, res) => {
     try {
-        
+        const fullname = req.body.fullname || req.body.fullName;
+        const { mobile, email, role } = req.body;
 
-        // const { fullname, email } = req.body;
-        const { fullname, mobile, email, role } = req.body;
         let user = await User.findOne({ email });
         if (!user) {
             user = await User.create({
@@ -140,6 +139,11 @@ export const googleAuth = async (req, res) => {
                 mobile,
                 role,
             })
+        } else {
+            if (!user.fullname && fullname) {
+                user.fullname = fullname;
+                await user.save();
+            }
         }
         const token = await genToken(user._id);
         res.cookie("token", token, {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoSearchSharp } from "react-icons/io5";
 import { CiBag1 } from "react-icons/ci";
@@ -6,6 +6,8 @@ import { LiaHeart } from "react-icons/lia";
 import { useSelector } from "react-redux";
 function Nav() {
     const { userData } = useSelector(state => state.user);
+    const [showInfo, setShowInfo] = useState(false)
+    const [showSerach, setShowSerach] = useState(false);
     return (
         <div className="w-full h-[80px] flex items-center justify-between md:justify-center gap-[30px] px-[20px]
          fixed top-0 z-[9999] bg-[#fff9f6] overflow-visible ">
@@ -22,24 +24,40 @@ function Nav() {
                     </div>
                 </div>
             </div>
-            {/* wishlist */}
-            <div className="relative cursor-pointer">
-                <LiaHeart size={25} className="text-[#ff4d2d]" />
-                <span className="absolute right-[-9px] top-[-12px] text-[#ff4d2d]">0</span>
-            </div>
-            {/* cart */}
-            <div className="relative cursor-pointer">
-                <CiBag1 size={25} className="text-[#ff4d2d]" />
-                <span className="absolute right-[-9px] top-[-12px] text-[#ff4d2d]">0</span>
-            </div>
-            {/* button */}
-            <button className="hidden md:block px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium cursor-pointer">
-                my order
-            </button>
-            {/* prfile */}
-            <div className="w-9 h-9 min-w-[36px] rounded-full bg-[#ff4d2d] text-white 
-            flex items-center justify-center font-bold text-base shadow cursor-pointer">
-                {(userData?.fullname || userData?.email)?.slice(0, 1).toUpperCase()}
+
+            <div className="flex items-center gap-4">
+                {/* search for small devices */}
+                <IoSearchSharp size={20} className="text-[#ff4d2d] text-xl md:hidden" />
+                {/* wishlist */}
+                <div className="relative cursor-pointer">
+                    <LiaHeart size={25} className="text-[#ff4d2d]" />
+                    <span className="absolute right-[-9px] top-[-12px] text-[#ff4d2d]">0</span>
+                </div>
+                {/* cart */}
+                <div className="relative cursor-pointer">
+                    <CiBag1 size={25} className="text-[#ff4d2d]" />
+                    <span className="absolute right-[-9px] top-[-12px] text-[#ff4d2d]">0</span>
+                </div>
+                {/* button */}
+                <button className="hidden md:block px-3 py-1 rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d] text-sm font-medium cursor-pointer">
+                    my order
+                </button>
+                {/* prfile */}
+                <div className="w-9 h-9 min-w-[36px] rounded-full bg-[#ff4d2d] text-white 
+            flex items-center justify-center font-bold text-base shadow cursor-pointer" onClick={() => setShowInfo(prev => !prev)}>
+                    {(userData?.fullname || userData?.email)?.slice(0, 1).toUpperCase()}
+                </div>
+                {/* user name */}
+                {showInfo && <div className="fixed top-[80px] right-[10px] md:right-[10%] lg:right-[25%] w-[180px] bg-white
+                 shadow-2xl rounded-xl p-[20px] flex flex-col gap-[10px] z-[9999]">
+                    <div className="text-semibold text-[17px]">
+                        {userData?.fullname}
+                    </div>
+                    {/* my order for phones */}
+                    <div className="md:hidden text-semibold cursor-pointer text-[#ff4d2d]">my order</div>
+                    {/* logout button */}
+                    <div className="text-semibold cursor-pointer text-[#ff4d2d]">log out</div>
+                </div>}
             </div>
         </div>
     )

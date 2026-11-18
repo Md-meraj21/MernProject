@@ -55,7 +55,7 @@ function Signup() {
         console.log(result);
         try {
             const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
-                fullName: result.user.displayName,
+                fullname: result.user.displayName,
                 email: result.user.email,
                 mobile,
                 role,
